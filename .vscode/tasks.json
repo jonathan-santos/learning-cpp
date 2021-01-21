@@ -1,0 +1,98 @@
+{
+	"version": "2.0.0",
+	"presentation": {
+		"focus": true,
+		"showReuseMessage": false,
+		"clear": true
+	},
+	"tasks": [{
+		"type": "shell",
+		"label": "Create bin folder",
+		"command": "mkdir -p ./bin",
+		"options": {
+			"cwd": "${workspaceFolder}"
+		},
+		"presentation": {
+			"echo": false,
+			"reveal": "never",
+			"focus": false,
+			"showReuseMessage": false,
+			"clear": false
+		}
+	},{
+		"type": "process",
+		"label": "Build",
+		"command": "g++.exe",
+		"args": [
+			"-Wall",
+			"-g",
+			"./src/*.cpp",
+			"-o",
+			"./bin/main.exe",
+			"-std=c++17",
+			// Declarations
+			// "-DDEBUG",
+			// Shared Projects----------------------------------------------
+			"-I./exampleLib",
+			"-L./exampleLib",
+			"-llogging",
+			// Libs---------------------------------------------------------
+			// GLFW
+			"-I./dependencies/GLFW/include",
+			"-L./dependencies/GLFW/lib",
+			"-lgdi32",
+			"-lglfw3",
+		],
+		"options": {
+			"cwd": "${workspaceFolder}"
+		},
+		"problemMatcher": [
+			"$gcc"
+		],
+		"dependsOn": ["Create bin folder"],
+		"group": {
+			"kind": "build",
+			"isDefault": true
+		}
+	}, {
+		"type": "process",
+		"label": "Compile",
+		"command": "g++",
+		"args": [
+			"${file}",
+			"-fsyntax-only",
+			"-std=c++17",
+			// Shared Projects----------------------------------------------
+			"-I./exampleLib",
+			// Libs---------------------------------------------------------
+			"-I./dependencies/GLFW/include",
+		],
+		"options": {
+			"cwd": "${workspaceFolder}"
+		},
+		"problemMatcher": [
+			"$gcc"
+		]
+	}, {
+		"type": "process",
+		"label": "Launch",
+		"command": "./bin/main.exe",
+		"options": {
+			"cwd": "${workspaceFolder}"
+		},
+		"presentation": {
+			"echo": false
+		},
+		"dependsOn": ["Build"]
+	},{
+		"type": "process",
+		"label": "Precompile",
+		"command": "g++.exe",
+		"args": [
+			"./src/pch.h"
+		],
+		"options": {
+			"cwd": "${workspaceFolder}"
+		}
+	}]
+}
